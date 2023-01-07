@@ -40,4 +40,23 @@ def encrypt(plaintext):
 
 def decrypt(encrypted):
     encrypted_bytes = BytesIO(base64.decodebytes(encrypted))
-    cipher_rsa, key
+    cipher_rsa, keysize_
+
+    encrypted_session_key = encrypted_bytes.read(keysize_in_bytes)
+    nonce = encrypted_bytes.read(16)
+    tag = encrypted_bytes.read(16)
+    ciphertext = encrypted_bytes.read()
+
+    session_key = cipher_rsa.decrypt(encrypted_session_key)
+    cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+    decrypted = cipher_aes.decrypt_and_verify(ciphertext, tag)
+
+    plaintext = zib.decompress(decrypted)
+    return plaintext
+
+    if __name__ == '__main__':
+        generate()
+
+    if __name__ == '__main__':
+        plaintext = b'hey there you.'
+        print(decrypt(encrypt(plaintext)))
