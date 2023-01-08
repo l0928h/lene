@@ -15,4 +15,4 @@ EXFIL = {
 }
 
 def find_docs(doc_type='.pdf'):
-    for parent, _,
+    for parent, _,,,,
