@@ -8,4 +8,11 @@ class Spider(scrapy.Spider):
 
 def parse(self, response):
     sp = BeautifulSoup(response.body, "html.parser")
-    
+    news = sp.select('#newListTable a.mbody')
+    content = list()
+    for headline in news:
+        temp = dict()
+        temp['title'] = headline.text
+        temp['url'] = headline['href']
+        content.append(temp)
+    print(content)
