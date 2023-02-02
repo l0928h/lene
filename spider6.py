@@ -15,3 +15,4 @@ domain = "{}://{}".format(urlparse(url).scheme, urlparse(url).hostname)
 html = requests.get(url).text
 sp = BeautifulSoup(html, 'html.parser')
 all_links = sp.find_all(['a','img'])
+
