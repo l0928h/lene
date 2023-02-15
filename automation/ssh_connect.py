@@ -2,8 +2,9 @@
 #
 
 
-import ssh_connect
+import automation.ssh_connect as ssh_connect
 import time
+
 Channel = ssh_connect.SSHClient()
 Channel.set_missing_host_key_policy(ssh_connect.AutoAddPolicy())
 Channel.connect(hostname="10.10.88.112", username='admin', password='P@ssw0rd', look_for_keys=False,allow_agent=False)
